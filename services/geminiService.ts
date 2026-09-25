@@ -231,7 +231,7 @@ export const getToolsForRole = (role: UserRole) => {
 
 export const generatePersonalizedLearningPath = async (student: Student): Promise<LearningPath | null> => {
   try {
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3.5-flash';
 
     // 1. Analyze student data to find weakest and strongest subjects from attendance
     const subjectStats: { [subject: string]: { present: number, total: number } } = {};
@@ -351,7 +351,7 @@ export const generateStudentInitiatedLearningPath = async (
   studentName: string
 ): Promise<LearningPath | null> => {
   try {
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3.5-flash';
 
     const prompt = `
 You are a friendly and intelligent "Study Partner AI" for a student named ${studentName}.
@@ -424,7 +424,7 @@ This plan should be realistic, actionable, and tailored to help ${studentName} a
 
 export const predictStudentPerformance = async (student: Student): Promise<PerformancePrediction | null> => {
   try {
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3.5-flash';
 
     // 1. Analyze student data
     const totalAttendance = student.attendance.length;
@@ -518,7 +518,7 @@ Your tone should be analytical but encouraging.
 
 export const generateProgressInsights = async (progressData: SubjectProgress[], studentName: string): Promise<ProgressInsight | null> => {
   try {
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3.5-flash';
 
     const prompt = `
 You are an encouraging and insightful AI academic coach for a student named ${studentName}.
@@ -579,7 +579,7 @@ The output MUST be a clean, valid JSON object adhering to the provided schema. D
 
 export const generateActivitySuggestions = async (student: Student): Promise<ActivitySuggestion[] | null> => {
   try {
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3.5-flash';
 
     // 1. Analyze student data to create a concise summary for the prompt
     let performanceSummary = `The student, ${student.name}, has the following academic profile:\n`;
@@ -691,7 +691,7 @@ const imageUrlToBase64 = async (url: string): Promise<string> => {
 
 export const verifyFaceMatch = async (registeredImageUrl: string, liveImageUrl: string): Promise<{ isMatch: boolean; confidence: number; reason: string } | null> => {
   try {
-    const model = 'gemini-2.5-flash';
+    const model = 'gemini-3.5-flash';
 
     const prompt = `**Objective:** You are a secure AI Face Verification system. Your task is to meticulously compare a 'live' image with a 'registered' image and decide if they are the same person. Your default stance is to DENY access unless the match is conclusive.
 

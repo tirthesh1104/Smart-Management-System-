@@ -107,7 +107,7 @@ const Chatbot: React.FC<ChatbotProps> = ({ context, userRole, actions }) => {
 
     try {
       chatRef.current = ai.chats.create({
-          model: 'gemini-2.5-flash',
+          model: 'gemini-3.5-flash',
           config: {
               systemInstruction: `You are a helpful AI assistant for a smart education platform with two modes: Question-Answering and Command-Execution.
 
