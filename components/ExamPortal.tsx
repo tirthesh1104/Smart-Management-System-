@@ -17,7 +17,11 @@ const ExamPortal: React.FC<ExamPortalProps> = ({ studentId, exams, submissions, 
   // FIX: Explicitly type the Map to ensure correct type inference for `submission`.
   const studentSubmissionsMap = new Map<string, ExamSubmission>(submissions.map(s => [s.examId, s]));
 
-  const handleSubmit = (answers: { [questionId: string]: string }, status: 'Completed' | 'Blocked') => {
+  const handleSubmit = (
+    answers: { [questionId: string]: string },
+    status: 'Completed' | 'Blocked' | 'Cancelled',
+    proctorData?: { tabSwitchCount: number; copyCount: number }
+  ) => {
     if (!takingExam) return;
     onSubmitExam({
       examId: takingExam.id,
@@ -25,6 +29,8 @@ const ExamPortal: React.FC<ExamPortalProps> = ({ studentId, exams, submissions, 
       answers,
       submittedAt: Date.now(),
       status,
+      tabSwitchCount: proctorData?.tabSwitchCount ?? 0,
+      copyCount: proctorData?.copyCount ?? 0,
     });
     setTakingExam(null);
   };
@@ -53,9 +59,12 @@ const ExamPortal: React.FC<ExamPortalProps> = ({ studentId, exams, submissions, 
           {exams.map((exam, index) => {
             const submission = studentSubmissionsMap.get(exam.id);
             const isBlocked = submission?.status === 'Blocked';
+            const isCancelled = submission?.status === 'Cancelled';
             return (
               <AnimatedElement key={exam.id} delay={index * 100}>
-                <div className={`bg-gray-900/50 p-6 rounded-lg border flex flex-col justify-between h-full ${isBlocked ? 'border-red-500/50' : 'border-gray-700'}`}>
+                <div className={`bg-gray-900/50 p-6 rounded-lg border flex flex-col justify-between h-full ${
+                  isBlocked ? 'border-red-500/50' : isCancelled ? 'border-yellow-500/50' : 'border-gray-700'
+                }`}>
                   <div>
                     <h3 className="text-xl font-bold text-white">{exam.title}</h3>
                     <p className="text-sm text-gray-400">{exam.subject}</p>
@@ -66,8 +75,18 @@ const ExamPortal: React.FC<ExamPortalProps> = ({ studentId, exams, submissions, 
                   </div>
                   <div className="mt-6">
                     {submission ? (
-                      <div className={`text-center p-4 rounded-lg border ${isBlocked ? 'bg-red-900/50 border-red-500/50' : 'bg-green-900/50 border-green-500/50'}`}>
-                        <p className={`text-sm ${isBlocked ? 'text-red-300' : 'text-green-300'}`}>{isBlocked ? 'Blocked' : 'Completed'}</p>
+                      <div className={`text-center p-4 rounded-lg border ${
+                        isBlocked 
+                          ? 'bg-red-900/50 border-red-500/50' 
+                          : isCancelled 
+                          ? 'bg-yellow-900/40 border-yellow-500/50'
+                          : 'bg-green-900/50 border-green-500/50'
+                      }`}>
+                        <p className={`text-sm font-semibold ${
+                          isBlocked ? 'text-red-300' : isCancelled ? 'text-yellow-300' : 'text-green-300'
+                        }`}>
+                          {submission.status}
+                        </p>
                         <p className="text-3xl font-bold text-white">{submission.score}%</p>
                       </div>
                     ) : (

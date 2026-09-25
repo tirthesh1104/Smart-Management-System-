@@ -159,29 +159,61 @@ const ExamManager: React.FC<ExamManagerProps> = ({ user, exams, examSubmissions,
                         <tr>
                             <th className="p-3">Student Name</th>
                             <th className="p-3">Status</th>
+                            <th className="p-3">Proctoring Telemetry</th>
                             <th className="p-3">Score</th>
                             <th className="p-3">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {submissionsForViewing.map(sub => (
-                            <tr key={sub.id} className={`border-b border-gray-700 transition-colors ${sub.status === 'Blocked' ? 'bg-red-900/20' : 'hover:bg-gray-700/50'}`}>
+                            <tr key={sub.id} className={`border-b border-gray-700 transition-colors ${
+                              sub.status === 'Blocked' 
+                                ? 'bg-red-900/20' 
+                                : sub.status === 'Cancelled' 
+                                ? 'bg-yellow-900/20' 
+                                : 'hover:bg-gray-700/50'
+                            }`}>
                                 <td className="p-3">
-                                    {sub.studentName}
+                                    <span className="font-semibold text-white">{sub.studentName}</span>
                                     <div className="text-xs text-gray-400">{new Date(sub.submittedAt).toLocaleString()}</div>
                                 </td>
                                 <td className="p-3">
-                                    <div className="flex flex-col">
-                                        <span className={`px-2 py-0.5 text-xs font-semibold rounded-full w-fit ${sub.status === 'Blocked' ? 'bg-red-500/50 text-red-200' : 'bg-green-600/50 text-green-200'}`}>
+                                    <div className="flex flex-col gap-1">
+                                        <span className={`px-2.5 py-0.5 text-xs font-semibold rounded-full w-fit ${
+                                          sub.status === 'Blocked' 
+                                            ? 'bg-red-500/30 text-red-200 border border-red-500/40' 
+                                            : sub.status === 'Cancelled' 
+                                            ? 'bg-yellow-500/30 text-yellow-200 border border-yellow-500/40' 
+                                            : 'bg-green-600/30 text-green-200 border border-green-500/40'
+                                        }`}>
                                             {sub.status}
                                         </span>
-                                        {sub.status === 'Blocked' && <span className="text-xs text-red-300 mt-1">Reason: Switched tabs</span>}
+                                        {sub.status === 'Blocked' && <span className="text-xs text-red-300">Reason: Switched tabs / Rule violation</span>}
+                                        {sub.status === 'Cancelled' && <span className="text-xs text-yellow-300">Exam cancelled by student</span>}
                                     </div>
                                 </td>
-                                <td className={`p-3 font-bold ${sub.score > 70 ? 'text-green-400' : 'text-yellow-400'}`}>{sub.score}%</td>
                                 <td className="p-3">
-                                    {sub.status === 'Blocked' && (
-                                        <button onClick={() => handleAllowRetake(sub.id)} className="text-sm px-3 py-1 bg-yellow-600/50 text-yellow-200 rounded-md hover:bg-yellow-600">
+                                    <div className="flex flex-wrap gap-2 text-xs">
+                                        <span className={`px-2 py-1 rounded-md border font-mono ${
+                                          (sub.tabSwitchCount ?? 0) > 0 
+                                            ? 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30' 
+                                            : 'bg-gray-700/50 text-gray-300 border-gray-600'
+                                        }`}>
+                                            Tab Switches: <strong className="font-bold">{sub.tabSwitchCount ?? 0}</strong>
+                                        </span>
+                                        <span className={`px-2 py-1 rounded-md border font-mono ${
+                                          (sub.copyCount ?? 0) > 0 
+                                            ? 'bg-purple-500/20 text-purple-300 border-purple-500/30' 
+                                            : 'bg-gray-700/50 text-gray-300 border-gray-600'
+                                        }`}>
+                                            Copied Content: <strong className="font-bold">{sub.copyCount ?? 0} times</strong>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td className={`p-3 font-bold text-lg ${sub.score > 70 ? 'text-green-400' : 'text-yellow-400'}`}>{sub.score}%</td>
+                                <td className="p-3">
+                                    {(sub.status === 'Blocked' || sub.status === 'Cancelled') && (
+                                        <button onClick={() => handleAllowRetake(sub.id)} className="text-xs px-3 py-1.5 bg-yellow-600/40 text-yellow-200 rounded-lg hover:bg-yellow-600 border border-yellow-500/40 font-medium">
                                             Allow Retake
                                         </button>
                                     )}
@@ -190,7 +222,7 @@ const ExamManager: React.FC<ExamManagerProps> = ({ user, exams, examSubmissions,
                         ))}
                          {submissionsForViewing.length === 0 && (
                             <tr>
-                                <td colSpan={4} className="text-center p-8 text-gray-400">No submissions for this exam yet.</td>
+                                <td colSpan={5} className="text-center p-8 text-gray-400">No submissions for this exam yet.</td>
                             </tr>
                         )}
                     </tbody>
