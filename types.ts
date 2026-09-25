@@ -2,6 +2,7 @@ export enum UserRole {
   Student = 'student',
   Teacher = 'teacher',
   Parent = 'parent',
+  Admin = 'admin',
 }
 
 export interface User {
@@ -43,6 +44,8 @@ export enum AssignmentStatus {
   Submitted = 'Submitted',
   Pending = 'Pending',
   Late = 'Late',
+  NotStarted = 'Not Started',
+  InProgress = 'In Progress',
 }
 
 export interface Assignment {

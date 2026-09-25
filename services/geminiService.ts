@@ -1,5 +1,6 @@
 import { GoogleGenAI, Type, FunctionDeclaration } from "@google/genai";
-import { Student, LearningPath, PerformancePrediction, ProgressInsight, SubjectProgress, ActivitySuggestion, UserRole, Event, LiveClass } from '../types';
+import { Student, LearningPath, PerformancePrediction, ProgressInsight, SubjectProgress, ActivitySuggestion, UserRole, LiveClass } from '../types';
+import { Event } from '../types-extended';
 import { CAMPUS_POLYGON } from '../utils/geolocation';
 
 export const ai = new GoogleGenAI({apiKey: process.env.API_KEY!});

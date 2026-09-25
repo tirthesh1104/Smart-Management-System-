@@ -15,9 +15,14 @@
     "recharts": "^3.2.1"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.6.1",
     "baseline-browser-mapping": "^2.9.14",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^4.3.3",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }
