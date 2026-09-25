@@ -250,12 +250,14 @@ const StudentDashboard: React.FC<StudentDashboardProps> = ({
             onPlanGenerated={onPlanUpdate}
         /></AnimatedElement>;
       case 'exams':
-        return <AnimatedElement><ExamPortal 
+        return (
+          <ExamPortal 
             studentId={user.id}
             exams={exams}
             submissions={examSubmissions}
             onSubmitExam={onSubmitExam}
-        /></AnimatedElement>;
+          />
+        );
       case 'files':
         return <AnimatedElement><FileManager mode="student" /></AnimatedElement>;
       case 'links':

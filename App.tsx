@@ -673,7 +673,7 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="bg-gray-900 text-gray-100 font-sans">
+    <div className="bg-gray-950 text-gray-100 font-sans min-h-screen">
        <IdleTimeoutModal
         isOpen={isIdlePromptVisible}
         onClose={handleStayLoggedIn}
